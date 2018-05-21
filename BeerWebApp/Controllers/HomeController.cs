@@ -1,23 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using BeerApp.Bll.Beers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BeerWebApp.Controllers
+namespace BeerApp.Web.Controllers
 {
+	[Route("api/Home")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+	    private readonly IBeerManager _beerManager;
 
-        public IActionResult Error()
-        {
-            ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-            return View();
-        }
+	    public HomeController(IBeerManager beerManager)
+	    {
+		    _beerManager = beerManager;
+	    }
+
+		[HttpGet]
+		[Route("Beers")]
+        public async Task<IActionResult> GetAllBeers()
+		{
+			var result = await _beerManager.GetAllBeers();
+
+			return Ok(result);
+		}
+
+	    [HttpGet]
+	    [Route("Beer/{id}")]
+	    public async Task<IActionResult> GetBeerById([Required]string id)
+	    {
+		    if (ModelState.IsValid)
+		    {
+			    var result = await _beerManager.GetBeerById(id);
+
+			    return Ok(result);
+		    }
+
+		    return BadRequest("Beer Id is required");
+	    }
     }
 }

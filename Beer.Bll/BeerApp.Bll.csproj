@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Beer.Entities\BeerApp.Entities.csproj" />
+    <ProjectReference Include="..\Beer.Service\BeerApp.Service.csproj" />
+  </ItemGroup>
+
+</Project>
