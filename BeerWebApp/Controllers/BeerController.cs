@@ -17,10 +17,19 @@ namespace BeerApp.Web.Controllers
 
 		[HttpGet]
 		[Route("[action]")]
-		public async Task<IActionResult> Beers(string query)
+		[Route("[action]/{query}")]
+		[Route("[action]/{styleId}")]
+		public async Task<IActionResult> Beers(string query, int? styleId)
 		{
-			var result = await _beerManager.GetBeers(query);
+			var result = await _beerManager.GetBeers(query, styleId);
+			return Ok(result);
+		}
 
+		[HttpGet]
+		[Route("[action]")]
+		public async Task<IActionResult> BeerStyles()
+		{
+			var result = await _beerManager.GetBeerStyles();
 			return Ok(result);
 		}
 
@@ -31,7 +40,6 @@ namespace BeerApp.Web.Controllers
 			if (ModelState.IsValid)
 			{
 				var result = await _beerManager.GetBeerById(id);
-
 				return Ok(result);
 			}
 

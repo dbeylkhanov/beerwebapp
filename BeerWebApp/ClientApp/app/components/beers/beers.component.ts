@@ -1,6 +1,6 @@
-﻿import {Component, ElementRef, ViewChild} from '@angular/core';
-import {OrderByPipe} from "../../pipes/orderby-pipe";
-import { BeerService } from '../../services/beer.service'  
+﻿import { Component, ElementRef, ViewChild, AfterViewInit  } from '@angular/core';
+import { OrderByPipe } from "../../pipes/orderby-pipe";
+import { BeerService } from '../../services/beer.service'
 import { Observable } from 'rxjs';
 import { Http } from '@angular/http'
 import 'rxjs/Rx';
@@ -11,12 +11,14 @@ import 'rxjs/Rx';
 	providers: [BeerService]
 })
 
-export class Beers {
+export class Beers  implements AfterViewInit{
 	selectedSort = 'abv';
-	public beerList: Beer[];  
+	public selectedStyle: any;
+	public beerList: Beer[];
+	public beerStyles: BeerStyle[];
 	query = '';
 
-	constructor(private _beerService: BeerService) {  
+	constructor(private _beerService: BeerService) {
 	
 	}
 
@@ -25,25 +27,58 @@ export class Beers {
 	ngOnInit() {
 		this.getBeers();
 
-		Observable.fromEvent(this.searchRef.nativeElement, 'keyup')
-			.map((evt: any) => evt.target.value)
-			.debounceTime(1000)        
-			.distinctUntilChanged()
-			.subscribe((text: string) => this.getBeers(text));
+		this.getBeerStyles();
 	}
 
-	getBeers(query?:string) {
-		this._beerService.getBeers(query).then(
+	ngAfterViewInit() {
+		Observable.fromEvent(this.searchRef.nativeElement, 'keyup')
+			.map((evt: any) => evt.target.value)
+			.debounceTime(1000)
+			.distinctUntilChanged()
+			.subscribe((text: string) => {
+				this.selectedStyle = this.beerStyles[0];
+				this.getBeers(text);
+			});
+	}
+
+	getBeers(query?: string) {
+		this._beerService.getBeers(query).subscribe(
 			data => {
 				this.beerList = data;
 			}
 		);
-	}  
+	}
+
+	getBeersByStyle(style:any) {
+		this._beerService.getBeersByStyle(style.id).subscribe(
+			data => {
+				this.beerList = data;
+			}
+		);
+	}
+
+	getBeerStyles() {
+		this._beerService.getBeerStyles().subscribe(
+			data => {
+				this.beerStyles = data;
+				
+				var allStyles: BeerStyle = { id: 0, name: 'All' };
+				this.beerStyles.splice(0, 0, allStyles);
+				this.selectedStyle = this.beerStyles[0];
+			}
+		);
+	}
 }
 
-interface Beer {  
-	id:string;
-	name: string;  
-	description:string;
-	abv:number;
+interface Beer {
+	id: string;
+	name: string;
+	description: string;
+	abv: number;
+	styleId: number;
+}
+
+interface BeerStyle {
+	id: number;
+	name: string;
 }

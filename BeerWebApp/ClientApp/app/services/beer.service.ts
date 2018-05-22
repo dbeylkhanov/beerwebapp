@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';  
 import 'rxjs/add/operator/catch';  
 import 'rxjs/add/observable/throw';
-import "rxjs/add/operator/toPromise";
 
 @Injectable()
 export class BeerService {
@@ -16,11 +15,22 @@ export class BeerService {
 		this.myAppUrl = baseUrl;
 	}
 
-	getBeers(query?:any): Promise<any[]> {
+	getBeers(query?:any){
 		return this.http.get(this.myAppUrl + 'api/Beers/' + (query != undefined ? '?query=' + query : ''))
-			.toPromise()
-			.then(this.extractData)
-			.catch(this.handleError);
+			.map(this.extractData)
+			.catch(this.errorHandler);
+	}
+
+	getBeersByStyle(styleId:any){
+		return this.http.get(this.myAppUrl + 'api/Beers/?styleId=' + styleId)
+			.map(this.extractData)
+			.catch(this.errorHandler);
+	}
+	
+	getBeerStyles() {
+		return this.http.get(this.myAppUrl + "api/BeerStyles/")
+			.map(this.extractData)
+			.catch(this.errorHandler);
 	}
 
 	private extractData(res: Response) {
@@ -28,9 +38,8 @@ export class BeerService {
 		return body || [];
 	}
 
-	private handleError(error: any) {
-		let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-		console.error(errMsg);
-		return Promise.reject(errMsg);
+	errorHandler(error: Response) {
+		console.log(error);
+		return Observable.throw(error);
 	}
 }
