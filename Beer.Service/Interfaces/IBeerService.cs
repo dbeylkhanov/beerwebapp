@@ -14,6 +14,18 @@ namespace BeerApp.Service.Interfaces
 	    Task<ResponseModel<IEnumerable<Beer>>> GetAllBeers();
 
 	    /// <summary>
+	    /// Get beer styles
+	    /// </summary>
+	    /// <returns>Response model with collection of beer styles</returns>
+	    Task<ResponseModel<IEnumerable<BeerStyle>>> GetBeerStyles();
+
+	    /// <summary>
+	    /// Get beer by style
+	    /// </summary>
+	    /// <returns>Response model with collection of beer styles</returns>
+	    Task<ResponseModel<IEnumerable<Beer>>> GetBeersByStyle(int styleId);
+
+	    /// <summary>
 	    /// Search beers by query
 	    /// </summary>
 	    /// <returns>Response model with collection of beers</returns>

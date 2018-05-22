@@ -9,5 +9,7 @@
 	    public string Id { get; set; }
 
 	    public string Abv { get; set; }
+
+	    public int StyleId { get; set; }
     }
 }

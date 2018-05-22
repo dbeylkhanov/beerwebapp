@@ -15,7 +15,7 @@ namespace BeerApp.Bll.Beers
 			_beerService = beerService;
 		}
 
-		public async Task<IEnumerable<Beer>> GetBeers(string query = default(string))
+		public async Task<IEnumerable<Beer>> GetBeers(string query = default(string), int? styleId = null)
 		{
 			if (!string.IsNullOrWhiteSpace(query))
 			{
@@ -23,7 +23,19 @@ namespace BeerApp.Bll.Beers
 				return searchResult.Data;
 			}
 
+			if (styleId.HasValue && styleId.Value > 0)
+			{
+				var beersByStyleResult = await _beerService.GetBeersByStyle(styleId.Value);
+				return beersByStyleResult.Data;
+			}
+
 			var result = await _beerService.GetAllBeers();
+			return result.Data;
+		}
+
+		public async Task<IEnumerable<BeerStyle>> GetBeerStyles()
+		{
+			var result = await _beerService.GetBeerStyles();
 			return result.Data;
 		}
 

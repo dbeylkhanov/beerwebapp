@@ -29,6 +29,28 @@ namespace BeerApp.Service
 		    return JsonConvert.DeserializeObject<ResponseModel<IEnumerable<Beer>>>(json);
 	    }
 
+	    public async Task<ResponseModel<IEnumerable<BeerStyle>>> GetBeerStyles()
+	    {
+		    var response = await HttpClientWrapper.GetInstance(_settings.Value.ApiUrl).GetAsync($"styles?key={_settings.Value.ApiSecretKey}");
+		    string json;
+		    using (var content = response.Content)
+		    {
+			    json = await content.ReadAsStringAsync();
+		    }
+		    return JsonConvert.DeserializeObject<ResponseModel<IEnumerable<BeerStyle>>>(json);
+	    }
+
+	    public async Task<ResponseModel<IEnumerable<Beer>>> GetBeersByStyle(int styleId)
+	    {
+		    var response = await HttpClientWrapper.GetInstance(_settings.Value.ApiUrl).GetAsync($"beers?key={_settings.Value.ApiSecretKey}&styleId={styleId}");
+		    string json;
+		    using (var content = response.Content)
+		    {
+			    json = await content.ReadAsStringAsync();
+		    }
+		    return JsonConvert.DeserializeObject<ResponseModel<IEnumerable<Beer>>>(json);
+	    }
+
 	    public async Task<ResponseModel<IEnumerable<Beer>>> SearchBeersByQuery(string query)
 	    {
 		    var response = await HttpClientWrapper.GetInstance(_settings.Value.ApiUrl).GetAsync($"search?key={_settings.Value.ApiSecretKey}&q={query}");
