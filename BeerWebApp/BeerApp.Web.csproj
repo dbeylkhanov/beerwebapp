@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.4.0" />
   </ItemGroup>
 
@@ -23,9 +24,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\components\beers\beers.component.ts" />
+    <None Remove="ClientApp\app\pipes\orderby-pipe.ts" />
+    <None Remove="ClientApp\app\services\beer.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Beer.Bll\BeerApp.Bll.csproj" />
     <ProjectReference Include="..\Beer.Entities\BeerApp.Entities.csproj" />
     <ProjectReference Include="..\Beer.Service\BeerApp.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\beers\beers.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\pipes\orderby-pipe.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\beer.service.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

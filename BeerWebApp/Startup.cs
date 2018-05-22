@@ -58,15 +58,16 @@ namespace BeerApp.Web
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
-                    HotModuleReplacement = true
+                    HotModuleReplacement = true,
+	                HotModuleReplacementEndpoint = "/dist/__webpack_hmr"  
                 });
 
-	            app.UseSwagger();
+	            //app.UseSwagger();
 
-	            app.UseSwaggerUI(c =>
-	            {
-		            c.SwaggerEndpoint("/swagger/v1/swagger.json", "BreweryDbAPI V1");
-	            });
+	            //app.UseSwaggerUI(c =>
+	            //{
+		           // c.SwaggerEndpoint("/swagger/v1/swagger.json", "BreweryDbAPI V1");
+	            //});
             }
             else
             {
