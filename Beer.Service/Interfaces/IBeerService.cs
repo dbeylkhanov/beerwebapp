@@ -14,6 +14,12 @@ namespace BeerApp.Service.Interfaces
 	    Task<ResponseModel<IEnumerable<Beer>>> GetAllBeers();
 
 	    /// <summary>
+	    /// Search beers by query
+	    /// </summary>
+	    /// <returns>Response model with collection of beers</returns>
+	    Task<ResponseModel<IEnumerable<Beer>>> SearchBeersByQuery(string query);
+
+	    /// <summary>
 	    /// Get beer by id
 	    /// </summary>
 	    /// <param name="id">Beer id</param>
