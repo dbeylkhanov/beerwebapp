@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BeerApp.Bll.Beers;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeerApp.Web.Controllers
 {
 	[Route("api")]
+	[EnableCors("CorsPolicy")]
 	public class BeerController : Controller
 	{
 		private readonly IBeerManager _beerManager;

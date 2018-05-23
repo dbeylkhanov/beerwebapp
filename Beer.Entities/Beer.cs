@@ -10,6 +10,6 @@
 
 	    public string Abv { get; set; }
 
-	    public int StyleId { get; set; }
+	    public BeerStyle Style { get; set; }
     }
 }

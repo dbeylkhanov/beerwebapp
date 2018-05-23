@@ -1,9 +1,10 @@
-﻿import { Component, ElementRef, ViewChild, AfterViewInit  } from '@angular/core';
-import { OrderByPipe } from "../../pipes/orderby-pipe";
+﻿import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { BeerService } from '../../services/beer.service'
 import { Observable } from 'rxjs';
-import { Http } from '@angular/http'
 import 'rxjs/Rx';
+import { BeerStyle } from "../../shared/beer-style.model";
+import { Beer } from "../../shared/beer.model";
+
 
 @Component({
 	selector: 'beers',
@@ -11,15 +12,20 @@ import 'rxjs/Rx';
 	providers: [BeerService]
 })
 
-export class Beers  implements AfterViewInit{
+export class BeersComponent implements AfterViewInit {
 	selectedSort = 'abv';
-	public selectedStyle: any;
-	public beerList: Beer[];
-	public beerStyles: BeerStyle[];
 	query = '';
+	public selectedStyle: any;
+	public filteredBeerList: Beer[] = [];
+	public filteredBeerStylesList: BeerStyle[] = [];
+	public noResults: boolean = false;
+	//
+	private beerList: Beer[] = [];
+	private beerStyles: BeerStyle[] = [];
+	private defaultBeerStyle = <BeerStyle>{ id: 0, name: 'All' };
 
 	constructor(private _beerService: BeerService) {
-	
+
 	}
 
 	@ViewChild('searchRef') searchRef: ElementRef;
@@ -44,41 +50,53 @@ export class Beers  implements AfterViewInit{
 	getBeers(query?: string) {
 		this._beerService.getBeers(query).subscribe(
 			data => {
-				this.beerList = data;
+				this.beerList = this.filteredBeerList = data;
+				if (this.query && this.query.length > 0) {
+					this.filteredBeerStylesList = this.beerStyles.filter(o1 => o1.id === 0 || this.beerList.some(o2 => o2.style != null && o1.id === o2.style.id));
+					this.selectedStyle = this.filteredBeerStylesList[0];
+				} else {
+					this.filteredBeerStylesList = this.beerStyles;
+					this.selectedStyle = this.filteredBeerStylesList[0];
+				}
+				this.checkBeerResultsCount();
 			}
 		);
 	}
 
-	getBeersByStyle(style:any) {
-		this._beerService.getBeersByStyle(style.id).subscribe(
-			data => {
-				this.beerList = data;
-			}
-		);
+	getBeersByStyle(style: any) {
+		if (!this.query && this.query.length === 0) {
+			this._beerService.getBeersByStyle(style.id).subscribe(
+				data => {
+					this.beerList = this.filteredBeerList = data;
+				}
+			);
+			this.checkBeerResultsCount();
+		} else {
+			if (style.id !== this.defaultBeerStyle.id)
+				this.filteredBeerList = this.beerList.filter(x => x.style.id === style.id);
+			else
+				this.filteredBeerList = this.beerList;
+			this.checkBeerResultsCount();
+		}
+
+	}
+
+	checkBeerResultsCount() {
+		this.noResults = this.filteredBeerList.length == 0;
 	}
 
 	getBeerStyles() {
 		this._beerService.getBeerStyles().subscribe(
 			data => {
 				this.beerStyles = data;
-				
-				var allStyles: BeerStyle = { id: 0, name: 'All' };
-				this.beerStyles.splice(0, 0, allStyles);
-				this.selectedStyle = this.beerStyles[0];
+
+				this.beerStyles.splice(0, 0, this.defaultBeerStyle);
+
+				this.filteredBeerStylesList = this.beerStyles;
+				this.selectedStyle = this.filteredBeerStylesList[0];
 			}
 		);
 	}
 }
 
-interface Beer {
-	id: string;
-	name: string;
-	description: string;
-	abv: number;
-	styleId: number;
-}
 
-interface BeerStyle {
-	id: number;
-	name: string;
-}

@@ -43,6 +43,12 @@ namespace BeerApp.Web
 
 	        services.AddOptions();
 
+	        services.AddCors(opts =>
+	        {
+		        opts.AddPolicy("CorsPolicy",
+			        builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+	        });
+
 	        // Register the Swagger generator, defining 1 or more Swagger documents
 	        services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "BreweryDbAPI", Version = "v1"}); });
 
@@ -74,6 +80,7 @@ namespace BeerApp.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+	        app.UseCors("CorsPolicy");
             app.UseStaticFiles();
 	       
             app.UseMvc(routes =>

@@ -24,9 +24,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\components\beer-details\beer-details.component.ts" />
     <None Remove="ClientApp\app\components\beers\beers.component.ts" />
     <None Remove="ClientApp\app\pipes\orderby-pipe.ts" />
     <None Remove="ClientApp\app\services\beer.service.ts" />
+    <None Remove="ClientApp\app\shared\beer-detail.model.ts" />
+    <None Remove="ClientApp\app\shared\beer-style.model.ts" />
+    <None Remove="ClientApp\app\shared\beer.model.ts" />
+    <None Remove="ClientApp\app\shared\brewery.model.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,9 +41,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\beer-details\beer-details.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\beers\beers.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\pipes\orderby-pipe.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\beer.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\beer-style.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\beer.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\beer-detail.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\brewery.model.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

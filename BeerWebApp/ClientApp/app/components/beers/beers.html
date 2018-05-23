@@ -8,7 +8,7 @@
 			<div class="col-md-3">
 				<label for="beerStyle">Style :</label>
 				<select id="beerStyle" class="form-control" [(ngModel)]="selectedStyle" (change)="getBeersByStyle(selectedStyle)">
-					<option *ngFor="let beerStyle of beerStyles" [ngValue]="beerStyle">
+					<option *ngFor="let beerStyle of filteredBeerStylesList" [ngValue]="beerStyle">
 						{{beerStyle.name}}
 					</option>
 				</select>
@@ -24,18 +24,24 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<div class="thumbnail" *ngFor="let beer of (beerList | orderby:selectedSort:selectedSort=='abv')">
+			<div class="thumbnail" *ngFor="let beer of (filteredBeerList | orderby:selectedSort:selectedSort=='abv')">
 				<div class="row">
 					<div class="col-sm-12">
-						<a href="#/beers/{{beer.id}}">
+						<a [routerLink]="['/beers', beer.id]">
 							<h4>
-								{{beer.name}} <span *ngIf="beer.abv" class="badge badge-warning">{{beer.abv}}°</span>
+								{{beer.name}}
 							</h4>
 						</a>
-						<div class="caption"><p class="text-justify">{{beer.description || 'No description'}}</p></div>
+						<h4><span *ngIf="beer.abv" class="label label-warning">{{beer.abv}}°</span></h4>
+						<h4><span *ngIf="beer.style" class="label label-danger">{{beer.style.name}}</span></h4>
+						<div class="caption">
+							<p class="text-justify">{{beer.description || 'No description'}}</p>
+						</div>
+
 					</div>
 				</div>
 			</div>
+			<h3 class="text-center" *ngIf="noResults"><span class="label label-default">No results found</span></h3>
 		</div>
 	</div>
 </div>

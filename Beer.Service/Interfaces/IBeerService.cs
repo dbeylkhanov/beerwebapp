@@ -36,6 +36,6 @@ namespace BeerApp.Service.Interfaces
 	    /// </summary>
 	    /// <param name="id">Beer id</param>
 	    /// <returns>Response model with Beer POCO</returns>
-	    Task<ResponseModel<Beer>> GetBeerById(string id);
+	    Task<ResponseModel<BeerDetail>> GetBeerById(string id);
     }
 }

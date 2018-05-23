@@ -11,7 +11,7 @@ namespace BeerApp.Bll.Beers
 
 	    Task<IEnumerable<BeerStyle>> GetBeerStyles();
 
-	    Task<Beer> GetBeerById(string id);
+	    Task<BeerDetail> GetBeerById(string id);
     }
 }
 

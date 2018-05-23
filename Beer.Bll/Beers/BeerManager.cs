@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BeerApp.Service.Interfaces;
 using BeerApp.Service.Models;
@@ -36,10 +37,10 @@ namespace BeerApp.Bll.Beers
 		public async Task<IEnumerable<BeerStyle>> GetBeerStyles()
 		{
 			var result = await _beerService.GetBeerStyles();
-			return result.Data;
+			return result.Data.OrderBy(x => x.Name);
 		}
 
-		public async Task<Beer> GetBeerById(string id)
+		public async Task<BeerDetail> GetBeerById(string id)
 		{
 			var result = await _beerService.GetBeerById(id);
 			return result.Data;

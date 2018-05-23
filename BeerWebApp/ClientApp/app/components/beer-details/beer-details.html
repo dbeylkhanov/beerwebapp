@@ -1,0 +1,32 @@
+﻿<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+			<h1>{{beerDetail.name}}</h1>
+		</div>
+	</div>
+	<ul class="list-group">
+		<li *ngIf="beerDetail.abv" class="list-group-item"><dl><dt>Alcohol content</dt><dd><h4><span class="label label-warning">{{beerDetail.abv}}°</span></h4></dd></dl></li>
+		<li *ngIf="beerDetail.description" class="list-group-item"><dl><dt>Description</dt><dd>{{beerDetail.description}}</dd></dl></li>
+		<li *ngIf="beerDetail.ibu" class="list-group-item"><dl><dt>IBU Rating</dt><dd><h4><span class="label label-primary">{{beerDetail.ibu}}</span></h4></dd></dl></li>
+		<li *ngIf="beerDetail.breweries && beerDetail.breweries.length > 0" class="list-group-item">
+			<dl>
+				<dt>Breweries</dt>
+				<dd>
+					<div *ngFor="let brewery of beerDetail.breweries">
+						<h4>
+							<span class="label label-default">
+								{{brewery.name}}
+							</span>
+						</h4>
+						<div class="caption" *ngIf="brewery.description">
+							<p class="text-justify">{{brewery.description}}</p>
+							<a href="{{brewery.website}}" target="_blank">Visit website</a>
+						</div>
+					</div>
+				</dd>
+			</dl>
+		</li>
+		<li *ngIf="beerDetail.style" class="list-group-item"><dl><dt>Style</dt><dd>{{beerDetail.style.description}}</dd></dl></li>
+		<li *ngIf="beerDetail.statusDisplay" class="list-group-item"><dl><dt>Status</dt><dd><h4><span class="label label-success">{{beerDetail.statusDisplay}}</span></h4></dd></dl></li>
+	</ul>
+</div>

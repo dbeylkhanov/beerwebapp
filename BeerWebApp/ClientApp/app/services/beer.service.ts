@@ -33,6 +33,12 @@ export class BeerService {
 			.catch(this.errorHandler);
 	}
 
+	getBeerById(id: string) {
+		return this.http.get(this.myAppUrl + "api/Beer/" + id)
+			.map(this.extractData)
+			.catch(this.errorHandler);
+	}
+
 	private extractData(res: Response) {
 		let body = res.json();
 		return body || [];

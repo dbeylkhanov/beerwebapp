@@ -63,15 +63,15 @@ namespace BeerApp.Service
 	    }
 
 
-	    public async Task<ResponseModel<Beer>> GetBeerById(string id)
+	    public async Task<ResponseModel<BeerDetail>> GetBeerById(string id)
 	    {
-		    var response = await HttpClientWrapper.GetInstance(_settings.Value.ApiUrl).GetAsync($"beer/{id}/?key={_settings.Value.ApiSecretKey}");
+		    var response = await HttpClientWrapper.GetInstance(_settings.Value.ApiUrl).GetAsync($"beer/{id}?key={_settings.Value.ApiSecretKey}&withBreweries=y");
 		    string json;
 		    using (var content = response.Content)
 		    {
 			    json = await content.ReadAsStringAsync();
 		    }
-		    return JsonConvert.DeserializeObject<ResponseModel<Beer>>(json);
+		    return JsonConvert.DeserializeObject<ResponseModel<BeerDetail>>(json);
 	    }
     }
 }
