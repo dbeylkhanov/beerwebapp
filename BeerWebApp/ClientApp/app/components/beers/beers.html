@@ -1,4 +1,5 @@
 ﻿<div class="container">
+	<ng-progress></ng-progress>
 	<div class="row">
 		<nav class="navbar">
 			<div class="col-md-6">
@@ -22,7 +23,7 @@
 			</div>
 		</nav>
 	</div>
-	<div class="row">
+	<div class="row"  *ngIf="!ngProgress.isStarted()">
 		<div class="col-md-12">
 			<div class="thumbnail" *ngFor="let beer of (filteredBeerList | orderby:selectedSort:selectedSort=='abv')">
 				<div class="row">

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/Rx';
 import { BeerStyle } from "../../shared/beer-style.model";
 import { Beer } from "../../shared/beer.model";
-
+import { NgProgress } from 'ngx-progressbar';
 
 @Component({
 	selector: 'beers',
@@ -24,13 +24,14 @@ export class BeersComponent implements AfterViewInit {
 	private beerStyles: BeerStyle[] = [];
 	private defaultBeerStyle = <BeerStyle>{ id: 0, name: 'All' };
 
-	constructor(private _beerService: BeerService) {
+	constructor(private _beerService: BeerService, public ngProgress: NgProgress) {
 
 	}
 
 	@ViewChild('searchRef') searchRef: ElementRef;
 
 	ngOnInit() {
+		
 		this.getBeers();
 
 		this.getBeerStyles();
@@ -48,6 +49,8 @@ export class BeersComponent implements AfterViewInit {
 	}
 
 	getBeers(query?: string) {
+		this.ngProgress.start();
+
 		this._beerService.getBeers(query).subscribe(
 			data => {
 				this.beerList = this.filteredBeerList = data;
@@ -59,24 +62,29 @@ export class BeersComponent implements AfterViewInit {
 					this.selectedStyle = this.filteredBeerStylesList[0];
 				}
 				this.checkBeerResultsCount();
+				this.ngProgress.done();
 			}
 		);
 	}
 
 	getBeersByStyle(style: any) {
+		
 		if (!this.query && this.query.length === 0) {
+			this.ngProgress.start();
 			this._beerService.getBeersByStyle(style.id).subscribe(
 				data => {
 					this.beerList = this.filteredBeerList = data;
 				}
 			);
 			this.checkBeerResultsCount();
+			this.ngProgress.done();
 		} else {
 			if (style.id !== this.defaultBeerStyle.id)
 				this.filteredBeerList = this.beerList.filter(x => x.style.id === style.id);
 			else
 				this.filteredBeerList = this.beerList;
 			this.checkBeerResultsCount();
+			
 		}
 
 	}

@@ -14,6 +14,8 @@ import { BeerDetailsComponent } from "./components/beer-details/beer-details.com
 
 import {OrderByPipe} from "./pipes/orderby-pipe"
 
+import {NgProgressModule } from "ngx-progressbar";
+
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -32,7 +34,8 @@ import {OrderByPipe} from "./pipes/orderby-pipe"
 			{ path: 'home', component: HomeComponent },
 			{ path: 'beers/:id', component: BeerDetailsComponent },
 			{ path: '**', redirectTo: 'home' }
-		])
+		]),
+		NgProgressModule
 	],
 
 	bootstrap: [AppComponent]

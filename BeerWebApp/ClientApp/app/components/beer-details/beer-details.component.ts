@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/Rx';
 import { BeerDetail } from "../../shared/beer-detail.model";
 import { ActivatedRoute } from '@angular/router';
+import { NgProgress } from 'ngx-progressbar';
 
 @Component({
 	selector: 'beer-details',
@@ -14,7 +15,7 @@ export class BeerDetailsComponent {
 	public selectedStyle: any;
 	public beerDetail: any = {};
 
-	constructor(private _beerService: BeerService, private route: ActivatedRoute) {
+	constructor(private _beerService: BeerService, private route: ActivatedRoute, public ngProgress: NgProgress) {
 
 	}
 
@@ -26,9 +27,11 @@ export class BeerDetailsComponent {
 	}
 
 	getBeerDetails(beerId: string) {
+		this.ngProgress.start();
 		this._beerService.getBeerById(beerId).subscribe(
 			data => {
 				this.beerDetail = data;
+				this.ngProgress.done();
 			}
 		);
 	}
