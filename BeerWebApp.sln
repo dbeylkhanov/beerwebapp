@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerApp.Web", "BeerWebApp\BeerApp.Web.csproj", "{7887A1AE-92B3-4E0E-BC29-3164F5F0B5AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerApp.Web", "BeerWebApp\BeerApp.Web.csproj", "{7887A1AE-92B3-4E0E-BC29-3164F5F0B5AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerApp.Bll", "Beer.Bll\BeerApp.Bll.csproj", "{22C02016-B679-4CDA-8BB2-458E97300797}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerApp.Bll", "Beer.Bll\BeerApp.Bll.csproj", "{22C02016-B679-4CDA-8BB2-458E97300797}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerApp.Entities", "Beer.Entities\BeerApp.Entities.csproj", "{9DCDBE25-82A5-472E-BCE5-212C14B27D3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerApp.Entities", "Beer.Entities\BeerApp.Entities.csproj", "{9DCDBE25-82A5-472E-BCE5-212C14B27D3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerApp.Service", "Beer.Service\BeerApp.Service.csproj", "{305EA7A6-95A6-4B8F-8396-AA4C5D7DBE1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerApp.Service", "Beer.Service\BeerApp.Service.csproj", "{305EA7A6-95A6-4B8F-8396-AA4C5D7DBE1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerApp.Bll.Tests", "BeerApp.Web.Tests\BeerApp.Bll.Tests.csproj", "{A75987CB-FED6-414B-B506-FD0462F026A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{305EA7A6-95A6-4B8F-8396-AA4C5D7DBE1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{305EA7A6-95A6-4B8F-8396-AA4C5D7DBE1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{305EA7A6-95A6-4B8F-8396-AA4C5D7DBE1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A75987CB-FED6-414B-B506-FD0462F026A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A75987CB-FED6-414B-B506-FD0462F026A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A75987CB-FED6-414B-B506-FD0462F026A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A75987CB-FED6-414B-B506-FD0462F026A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

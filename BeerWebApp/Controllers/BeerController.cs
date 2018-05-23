@@ -24,7 +24,12 @@ namespace BeerApp.Web.Controllers
 		public async Task<IActionResult> Beers(string query, int? styleId)
 		{
 			var result = await _beerManager.GetBeers(query, styleId);
-			return Ok(result);
+			if (string.IsNullOrEmpty(result.ErrorMessage))
+			{
+				return Ok(result.Data);
+			}
+
+			return BadRequest(result.ErrorMessage);
 		}
 
 		[HttpGet]
@@ -32,7 +37,12 @@ namespace BeerApp.Web.Controllers
 		public async Task<IActionResult> BeerStyles()
 		{
 			var result = await _beerManager.GetBeerStyles();
-			return Ok(result);
+			if (string.IsNullOrEmpty(result.ErrorMessage))
+			{
+				return Ok(result.Data);
+			}
+
+			return BadRequest(result.ErrorMessage);
 		}
 
 		[HttpGet]
@@ -42,7 +52,12 @@ namespace BeerApp.Web.Controllers
 			if (ModelState.IsValid)
 			{
 				var result = await _beerManager.GetBeerById(id);
-				return Ok(result);
+				if (string.IsNullOrEmpty(result.ErrorMessage))
+				{
+					return Ok(result.Data);
+				}
+
+				return BadRequest(result.ErrorMessage);
 			}
 
 			return BadRequest("Beer Id is required");
