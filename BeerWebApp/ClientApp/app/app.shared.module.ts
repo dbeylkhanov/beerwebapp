@@ -12,7 +12,7 @@ import { BeersComponent } from "./components/beers/beers.component";
 
 import { BeerDetailsComponent } from "./components/beer-details/beer-details.component";
 
-import {OrderByPipe} from "./pipes/orderby-pipe"
+import {OrderByPipe} from "./shared/pipes/orderby-pipe";
 
 import {NgProgressModule } from "ngx-progressbar";
 

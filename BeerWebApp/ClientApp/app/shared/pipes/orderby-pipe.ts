@@ -1,6 +1,6 @@
-﻿import {Pipe, PipeTransform} from '@angular/core';
+﻿import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: "orderby"})
+@Pipe({ name: "orderby" })
 export class OrderByPipe implements PipeTransform {
 	transform(array: Array<string>, args: string, isNumber: boolean): Array<string> {
 		if (array !== undefined) {
@@ -11,7 +11,6 @@ export class OrderByPipe implements PipeTransform {
 					leftValue = parseFloat(leftValue);
 					rightValue = parseFloat(rightValue);
 				}
-
 				if (leftValue < rightValue) {
 					return -1;
 				} else if (leftValue > rightValue) {

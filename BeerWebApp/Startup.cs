@@ -13,24 +13,29 @@ namespace BeerApp.Web
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
-        {
-	        var builder = new ConfigurationBuilder()
-		        .SetBasePath(env.ContentRootPath)
-		        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-		        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-		        .AddEnvironmentVariables();
+	    public Startup(IHostingEnvironment env)
+	    {
+		    var builder = new ConfigurationBuilder()
+			    .SetBasePath(env.ContentRootPath)
+			    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+			    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+			    .AddEnvironmentVariables();
 
-	        if (env.IsDevelopment())
-	        {
-		        // For more details see http://go.microsoft.com/fwlink/?LinkID=532709
-		        builder.AddUserSecrets<Startup>();
-	        }
+		    if (env.IsDevelopment())
+		    {
+			    // For more details see http://go.microsoft.com/fwlink/?LinkID=532709
+			    builder.AddUserSecrets<Startup>();
+		    }
 
-	        Configuration = builder.Build();
+		    Configuration = builder.Build();
 
-        }
-
+	    }
+		/*
+	    public Startup(IConfiguration configuration)
+	    {
+		    Configuration = configuration;
+	    }
+		*/
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
