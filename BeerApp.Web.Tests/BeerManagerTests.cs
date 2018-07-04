@@ -18,14 +18,9 @@ namespace BeerApp.Bll.Tests
 
 		public BeerManagerTests()
 		{
-			IBeerService beerService = new BeerService(new OptionsWrapper<BreweryDBSettings>(new BreweryDBSettings()
-			{
-				
-				// TODO: Need to set API key here, otherwise, all tests will fail always (except of 1st test with inner mock of brewerydbsettings)
-
-				ApiSecretKey = "YourSecretKey ",
-				ApiUrl = "http://api.brewerydb.com/v2/"
-			}));
+			var settings = new BreweryDBSettings();
+			settings.Init("http://api.brewerydb.com/v2/", "Your Secret Key");
+			IBeerService beerService = new BeerService(new OptionsWrapper<BreweryDBSettings>(settings));
 
 			_beerManager = new BeerManager(beerService);
 		}
@@ -33,12 +28,10 @@ namespace BeerApp.Bll.Tests
 		[Fact]
 		public async void InvalidBreweryDbSettingsTest()
 		{
+			var settings = new BreweryDBSettings();
+			settings.Init("http://api.brewerydb.com/v2/", "");
 			// act
-			var beerService = new BeerService(new OptionsWrapper<BreweryDBSettings>(new BreweryDBSettings()
-			{
-				ApiSecretKey = "",
-				ApiUrl = "http://api.brewerydb.com/v2/"
-			}));
+			var beerService = new BeerService(new OptionsWrapper<BreweryDBSettings>(settings));
 
 			var beerManager = new BeerManager(beerService);
 

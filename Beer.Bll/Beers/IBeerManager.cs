@@ -12,6 +12,8 @@ namespace BeerApp.Bll.Beers
 	    Task<ResponseModel<IEnumerable<BeerStyle>>> GetBeerStyles();
 
 	    Task<ResponseModel<BeerDetail>> GetBeerById(string id);
+
+	    void InitBreweryDbConnectionString(string url, string token);
     }
 }
 

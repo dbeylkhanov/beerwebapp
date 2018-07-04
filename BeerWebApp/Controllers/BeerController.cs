@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Threading.Tasks;
 using BeerApp.Bll.Beers;
 using Microsoft.AspNetCore.Cors;
@@ -24,7 +25,7 @@ namespace BeerApp.Web.Controllers
 		public async Task<IActionResult> Beers(string query, int? styleId)
 		{
 			var result = await _beerManager.GetBeers(query, styleId);
-			if (string.IsNullOrEmpty(result.ErrorMessage))
+			if (result.StatusCode == HttpStatusCode.OK)
 			{
 				return Ok(result.Data);
 			}
@@ -37,7 +38,7 @@ namespace BeerApp.Web.Controllers
 		public async Task<IActionResult> BeerStyles()
 		{
 			var result = await _beerManager.GetBeerStyles();
-			if (string.IsNullOrEmpty(result.ErrorMessage))
+			if (result.StatusCode == HttpStatusCode.OK)
 			{
 				return Ok(result.Data);
 			}
@@ -52,7 +53,7 @@ namespace BeerApp.Web.Controllers
 			if (ModelState.IsValid)
 			{
 				var result = await _beerManager.GetBeerById(id);
-				if (string.IsNullOrEmpty(result.ErrorMessage))
+				if (result.StatusCode == HttpStatusCode.OK)
 				{
 					return Ok(result.Data);
 				}
@@ -61,6 +62,18 @@ namespace BeerApp.Web.Controllers
 			}
 
 			return BadRequest("Beer Id is required");
+		}
+
+		[HttpPatch]
+		[Route("[action]/{url}/{token}")]
+		public IActionResult InitBreweryDbConnectionString([FromBody]string url, [FromBody]string token)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest("Connection settings are invalid");
+
+			_beerManager.InitBreweryDbConnectionString(url, token);
+
+			return Ok();
 		}
 	}
 }

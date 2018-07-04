@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BeerApp.Service.Interfaces;
 using BeerApp.Service.Models;
@@ -44,6 +44,11 @@ namespace BeerApp.Bll.Beers
 		{
 			var result = await _beerService.GetBeerById(id);
 			return result;
+		}
+
+		public void InitBreweryDbConnectionString(string url, string token)
+		{
+			_beerService.InitBreweryDbConnectionString(url, token);
 		}
 	}
 }
