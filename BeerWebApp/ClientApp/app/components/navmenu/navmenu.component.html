@@ -14,15 +14,15 @@
             <ul class='nav navbar-nav'>
 	            <li [routerLinkActive]="['link-active']">
 		            <a [routerLink]="['/home']">
-			            <span class='glyphicon glyphicon-home'></span> Beers
+			            <span class='glyphicon glyphicon-home'></span> Home
+		            </a>
+	            </li>
+	            <li [routerLinkActive]="['link-active']">
+		            <a [routerLink]="['/settings']">
+			            <span class='glyphicon glyphicon-user'></span> Settings
 		            </a>
 	            </li>
 	            <!--<li [routerLinkActive]="['link-active']">
-		            <a [routerLink]="['/category']">
-			            <span class='glyphicon glyphicon-education'></span> Category
-		            </a>
-	            </li>
-                <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/brewery']">
                         <span class='glyphicon glyphicon-education'></span> Brewery
                     </a>

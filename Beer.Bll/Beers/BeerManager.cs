@@ -45,10 +45,5 @@ namespace BeerApp.Bll.Beers
 			var result = await _beerService.GetBeerById(id);
 			return result;
 		}
-
-		public void InitBreweryDbConnectionString(string url, string token)
-		{
-			_beerService.InitBreweryDbConnectionString(url, token);
-		}
 	}
 }

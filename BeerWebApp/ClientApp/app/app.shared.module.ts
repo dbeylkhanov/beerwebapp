@@ -16,6 +16,8 @@ import {OrderByPipe} from "./shared/pipes/orderby-pipe";
 
 import {NgProgressModule } from "ngx-progressbar";
 
+import {SettingsComponent} from "./components/settings/settings.component";
+
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -23,7 +25,8 @@ import {NgProgressModule } from "ngx-progressbar";
 		HomeComponent,
 		OrderByPipe,
 		BeersComponent,
-		BeerDetailsComponent
+		BeerDetailsComponent,
+		SettingsComponent
 	],
 	imports: [
 		CommonModule,
@@ -32,6 +35,7 @@ import {NgProgressModule } from "ngx-progressbar";
 		RouterModule.forRoot([
 			{ path: '', redirectTo: 'home', pathMatch: 'full' },
 			{ path: 'home', component: HomeComponent },
+			{ path: 'settings', component: SettingsComponent },
 			{ path: 'beers/:id', component: BeerDetailsComponent },
 			{ path: '**', redirectTo: 'home' }
 		]),

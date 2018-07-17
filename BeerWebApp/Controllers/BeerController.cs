@@ -63,17 +63,5 @@ namespace BeerApp.Web.Controllers
 
 			return BadRequest("Beer Id is required");
 		}
-
-		[HttpPatch]
-		[Route("[action]/{url}/{token}")]
-		public IActionResult InitBreweryDbConnectionString([FromBody]string url, [FromBody]string token)
-		{
-			if (!ModelState.IsValid)
-				return BadRequest("Connection settings are invalid");
-
-			_beerManager.InitBreweryDbConnectionString(url, token);
-
-			return Ok();
-		}
 	}
 }

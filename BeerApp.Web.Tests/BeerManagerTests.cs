@@ -4,7 +4,6 @@ using BeerApp.Bll.Beers;
 using BeerApp.Entities;
 using BeerApp.Service;
 using BeerApp.Service.Interfaces;
-using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace BeerApp.Bll.Tests
@@ -18,9 +17,11 @@ namespace BeerApp.Bll.Tests
 
 		public BeerManagerTests()
 		{
-			var settings = new BreweryDBSettings();
-			settings.Init("http://api.brewerydb.com/v2/", "Your Secret Key");
-			IBeerService beerService = new BeerService(new OptionsWrapper<BreweryDBSettings>(settings));
+			IBeerService beerService = new BeerService(new BreweryDBSettings()
+			{
+				ApiSecretKey = "YourSecretKey",
+				ApiUrl = "http://api.brewerydb.com/v2/"
+			});
 
 			_beerManager = new BeerManager(beerService);
 		}
@@ -28,10 +29,12 @@ namespace BeerApp.Bll.Tests
 		[Fact]
 		public async void InvalidBreweryDbSettingsTest()
 		{
-			var settings = new BreweryDBSettings();
-			settings.Init("http://api.brewerydb.com/v2/", "");
 			// act
-			var beerService = new BeerService(new OptionsWrapper<BreweryDBSettings>(settings));
+			var beerService = new BeerService(new BreweryDBSettings()
+			{
+				ApiSecretKey = "YourSecretKey ",
+				ApiUrl = "http://api.brewerydb.com/v2/"
+			});
 
 			var beerManager = new BeerManager(beerService);
 

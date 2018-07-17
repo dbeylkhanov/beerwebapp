@@ -1,11 +1,6 @@
 ﻿
-import { Injectable, Inject } from '@angular/core';  
-import { Http, Response } from '@angular/http';  
-import { Observable } from 'rxjs/Observable';  
-import { Router } from '@angular/router';  
-import 'rxjs/add/operator/map';  
-import 'rxjs/add/operator/catch';  
-import 'rxjs/add/observable/throw';
+import { Injectable, Inject } from '@angular/core';
+import { Http, Response } from '@angular/http';
 
 @Injectable()
 export class BeerService {
@@ -15,37 +10,41 @@ export class BeerService {
 		this.myAppUrl = baseUrl;
 	}
 
-	getBeers(query?:any){
+	getBeers(query?: any): Promise<any> {
 		return this.http.get(this.myAppUrl + 'api/Beers/' + (query != undefined ? '?query=' + query : ''))
-			.map(this.extractData)
-			.catch(this.errorHandler);
+			.toPromise()
+			.then(this.extractData);
 	}
 
-	getBeersByStyle(styleId:any){
+	getBeersByStyle(styleId: any): Promise<any> {
 		return this.http.get(this.myAppUrl + 'api/Beers/?styleId=' + styleId)
-			.map(this.extractData)
-			.catch(this.errorHandler);
+			.toPromise()
+			.then(this.extractData);
 	}
-	
-	getBeerStyles() {
+
+	getBeerStyles(): Promise<any> {
 		return this.http.get(this.myAppUrl + "api/BeerStyles/")
-			.map(this.extractData)
-			.catch(this.errorHandler);
+			.toPromise()
+			.then(this.extractData);
 	}
 
-	getBeerById(id: string) {
+	getBeerById(id: string): Promise<any> {
 		return this.http.get(this.myAppUrl + "api/Beer/" + id)
-			.map(this.extractData)
-			.catch(this.errorHandler);
+			.toPromise()
+			.then(this.extractData);
 	}
 
-	private extractData(res: Response) {
-		let body = res.json();
-		return body || [];
+	private extractData(res: Response): Promise<any> {
+		if (res.status === 200) {
+			let body = res.json();
+			return Promise.resolve(body || []);
+		}
+		console.log(res.status);
+		return Promise.reject(res);
 	}
 
-	errorHandler(error: Response) {
-		console.log(error);
-		return Observable.throw(error);
+	errorHandler(error: Response): Promise<any> {
+		console.error('An error occurred', error);
+		return Promise.reject(error);
 	}
 }

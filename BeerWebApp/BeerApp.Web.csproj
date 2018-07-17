@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
@@ -9,9 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +25,7 @@
   <ItemGroup>
     <None Remove="ClientApp\app\components\beer-details\beer-details.component.ts" />
     <None Remove="ClientApp\app\components\beers\beers.component.ts" />
+    <None Remove="ClientApp\app\components\settings\settings.component.ts" />
     <None Remove="ClientApp\app\shared\pipes\orderby-pipe.ts" />
     <None Remove="ClientApp\app\services\beer.service.ts" />
     <None Remove="ClientApp\app\shared\beer-detail.model.ts" />
@@ -43,6 +43,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\beer-details\beer-details.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\beers\beers.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\settings\settings.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\pipes\orderby-pipe.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\beer.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\beer-style.model.ts" />

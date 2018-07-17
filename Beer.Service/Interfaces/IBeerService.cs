@@ -37,13 +37,5 @@ namespace BeerApp.Service.Interfaces
 	    /// <param name="id">Beer id</param>
 	    /// <returns>Response model with Beer POCO</returns>
 	    Task<ResponseModel<BeerDetail>> GetBeerById(string id);
-
-	    /// <summary>
-	    /// Init brewery db connection settings
-	    /// </summary>
-	    /// <param name="url">api url</param>
-	    /// <param name="token">secret key</param>
-	    /// <returns></returns>
-	    void InitBreweryDbConnectionString(string url, string token);
     }
 }

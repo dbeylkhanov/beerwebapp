@@ -23,10 +23,10 @@
 			</div>
 		</nav>
 	</div>
-	<div class="row"  *ngIf="!ngProgress.isStarted()">
+	<div class="row" *ngIf="!ngProgress.isStarted() || !noResults">
 		<div class="col-md-12">
 			<div class="thumbnail" *ngFor="let beer of (filteredBeerList | orderby:selectedSort:selectedSort=='abv')">
-				<div class="row">
+				<div class="row" >
 					<div class="col-sm-12">
 						<a [routerLink]="['/beers', beer.id]">
 							<h4>
@@ -42,7 +42,9 @@
 					</div>
 				</div>
 			</div>
-			<h3 class="text-center" *ngIf="noResults"><span class="label label-default">No results found</span></h3>
 		</div>
+	</div>
+	<div class="row" *ngIf="!ngProgress.isStarted() || noResults">
+		<h3 class="text-center"><span class="label label-default">No results found</span></h3>
 	</div>
 </div>

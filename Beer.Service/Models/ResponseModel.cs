@@ -1,9 +1,9 @@
-﻿using System.Net;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Net;
 
 namespace BeerApp.Service.Models
 {
-	public class ResponseModel<T>
+	public class ResponseModel<T>: IResponseModel
 	{
 		public string ErrorMessage { get; private set; }
 		public HttpStatusCode StatusCode { get; private set; }
@@ -16,10 +16,20 @@ namespace BeerApp.Service.Models
 			ErrorMessage = errorMessage;
 		}
 
+		public ResponseModel(string errorMessage)
+		{
+			ErrorMessage = errorMessage;
+		}
 
 		public void SetStatusCode(HttpStatusCode statusCode)
 		{
 			StatusCode = statusCode;
 		}
+	}
+
+	public interface IResponseModel
+	{
+		string ErrorMessage { get; }
+		HttpStatusCode StatusCode { get; }
 	}
 }
