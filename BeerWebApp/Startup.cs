@@ -61,6 +61,12 @@ namespace BeerApp.Web
 		        options.Cookie.HttpOnly = true;
 	        });
 
+	        services.Configure<ApiBehaviorOptions>(options =>
+	        {
+		        options.SuppressConsumesConstraintForFormFileParameters = true;
+		        options.SuppressInferBindingSourcesForParameters = true;
+		        options.SuppressModelStateInvalidFilter = true;
+	        });
 
 	        services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);;
 

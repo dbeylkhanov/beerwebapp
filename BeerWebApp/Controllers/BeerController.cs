@@ -9,6 +9,7 @@ namespace BeerApp.Web.Controllers
 {
 	[Route("api")]
 	[EnableCors("CorsPolicy")]
+	[ApiController]
 	public class BeerController : Controller
 	{
 		private readonly IBeerManager _beerManager;
@@ -50,18 +51,13 @@ namespace BeerApp.Web.Controllers
 		[Route("[action]/{id}")]
 		public async Task<IActionResult> Beer([Required]string id)
 		{
-			if (ModelState.IsValid)
+			var result = await _beerManager.GetBeerById(id);
+			if (result.StatusCode == HttpStatusCode.OK)
 			{
-				var result = await _beerManager.GetBeerById(id);
-				if (result.StatusCode == HttpStatusCode.OK)
-				{
-					return Ok(result.Data);
-				}
-
-				return BadRequest(result.ErrorMessage);
+				return Ok(result.Data);
 			}
 
-			return BadRequest("Beer Id is required");
+			return BadRequest(result.ErrorMessage);
 		}
 	}
 }

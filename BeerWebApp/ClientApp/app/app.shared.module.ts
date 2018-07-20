@@ -12,11 +12,10 @@ import { BeersComponent } from "./components/beers/beers.component";
 
 import { BeerDetailsComponent } from "./components/beer-details/beer-details.component";
 
-import {OrderByPipe} from "./shared/pipes/orderby-pipe";
+import { OrderByPipe } from "./shared/pipes/orderby-pipe";
 
-import {NgProgressModule } from "ngx-progressbar";
-
-import {SettingsComponent} from "./components/settings/settings.component";
+import { NgProgressModule } from "ngx-progressbar";
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
 	declarations: [
@@ -25,8 +24,7 @@ import {SettingsComponent} from "./components/settings/settings.component";
 		HomeComponent,
 		OrderByPipe,
 		BeersComponent,
-		BeerDetailsComponent,
-		SettingsComponent
+		BeerDetailsComponent
 	],
 	imports: [
 		CommonModule,
@@ -35,11 +33,11 @@ import {SettingsComponent} from "./components/settings/settings.component";
 		RouterModule.forRoot([
 			{ path: '', redirectTo: 'home', pathMatch: 'full' },
 			{ path: 'home', component: HomeComponent },
-			{ path: 'settings', component: SettingsComponent },
 			{ path: 'beers/:id', component: BeerDetailsComponent },
 			{ path: '**', redirectTo: 'home' }
 		]),
-		NgProgressModule
+		NgProgressModule,
+		NgxPaginationModule
 	],
 
 	bootstrap: [AppComponent]

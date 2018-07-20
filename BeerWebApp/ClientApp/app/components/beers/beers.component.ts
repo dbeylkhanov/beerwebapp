@@ -17,7 +17,6 @@ export class BeersComponent implements AfterViewInit {
 	public selectedStyle: any;
 	public filteredBeerList: Beer[] = [];
 	public filteredBeerStylesList: BeerStyle[] = [];
-	public noResults: boolean = false;
 	//
 	private beerList: Beer[] = [];
 	private beerStyles: BeerStyle[] = [];
@@ -27,7 +26,7 @@ export class BeersComponent implements AfterViewInit {
 
 	}
 
-	@ViewChild('searchRef') searchRef: ElementRef;
+	@ViewChild('searchRef', {read: ElementRef}) searchRef: ElementRef;
 
 	ngOnInit() {
 
@@ -60,7 +59,6 @@ export class BeersComponent implements AfterViewInit {
 				this.filteredBeerStylesList = this.beerStyles;
 				this.selectedStyle = this.filteredBeerStylesList[0];
 			}
-			this.checkBeerResultsCount();
 			this.ngProgress.done();
 		}, (error) => {
 			this.beerList.length = this.filteredBeerList.length = 0;
@@ -80,8 +78,6 @@ export class BeersComponent implements AfterViewInit {
 			this._beerService.getBeersByStyle(style.id).then(
 				(data) => {
 					this.beerList = this.filteredBeerList = data;
-
-					this.checkBeerResultsCount();
 					this.ngProgress.done();
 				}, (error) => {
 					this.ngProgress.done();
@@ -97,14 +93,11 @@ export class BeersComponent implements AfterViewInit {
 				this.filteredBeerList = this.beerList.filter(x => x.style.id === style.id);
 			else
 				this.filteredBeerList = this.beerList;
-			this.checkBeerResultsCount();
-
 		}
-
 	}
 
-	checkBeerResultsCount() {
-		this.noResults = this.filteredBeerList.length == 0;
+	get noResults(): boolean {
+		return this.filteredBeerList.length === 0;
 	}
 
 	getBeerStyles() {
