@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using BeerApp.Bll.Beers;
@@ -41,7 +42,7 @@ namespace BeerApp.Web.Controllers
 			var result = await _beerManager.GetBeerStyles();
 			if (result.StatusCode == HttpStatusCode.OK)
 			{
-				return Ok(result.Data);
+				return Ok(result.Data.OrderBy(x => x.Name));
 			}
 
 			return BadRequest(result.ErrorMessage);
