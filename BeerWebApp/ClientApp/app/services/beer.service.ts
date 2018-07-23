@@ -1,6 +1,9 @@
 ﻿
 import { Injectable, Inject } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs';
+import {map, catchError} from "rxjs/operators";
+import {Beer} from "../shared/beer.model";
 
 @Injectable()
 export class BeerService {
@@ -10,31 +13,39 @@ export class BeerService {
 		this.myAppUrl = baseUrl;
 	}
 
-	getBeers(query?: any): Promise<any> {
+	getBeers(query?: any): Observable<any> {
 		return this.http.get(this.myAppUrl + 'api/Beers/' + (query != undefined ? '?query=' + query : ''))
-			.toPromise()
-			.then(this.extractData);
+			.pipe(
+				map(this.extractData),
+				catchError(this.errorHandler)
+			);
 	}
 
-	getBeersByStyle(styleId: any): Promise<any> {
+	getBeersByStyle(styleId: any): Observable<any> {
 		return this.http.get(this.myAppUrl + 'api/Beers/?styleId=' + styleId)
-			.toPromise()
-			.then(this.extractData);
+			.pipe(
+				map(this.extractData),
+				catchError(this.errorHandler)
+			);
 	}
 
-	getBeerStyles(): Promise<any> {
+	getBeerStyles(): Observable<any> {
 		return this.http.get(this.myAppUrl + "api/BeerStyles/")
-			.toPromise()
-			.then(this.extractData);
+			.pipe(
+				map(this.extractData),
+				catchError(this.errorHandler)
+			);
 	}
 
-	getBeerById(id: string): Promise<any> {
+	getBeerById(id: string): Observable<any> {
 		return this.http.get(this.myAppUrl + "api/Beer/" + id)
-			.toPromise()
-			.then(this.extractData);
+			.pipe(
+				map(this.extractData),
+				catchError(this.errorHandler)
+			);
 	}
 
-	private extractData(res: Response): Promise<any> {
+	private extractData(res: Response) {
 		if (res.status === 200) {
 			let body = res.json();
 			return Promise.resolve(body || []);
@@ -43,7 +54,7 @@ export class BeerService {
 		return Promise.reject(res);
 	}
 
-	errorHandler(error: Response): Promise<any> {
+	errorHandler(error: Response) {
 		console.error('An error occurred', error);
 		return Promise.reject(error);
 	}

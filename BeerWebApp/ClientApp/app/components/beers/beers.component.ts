@@ -26,7 +26,7 @@ export class BeersComponent implements AfterViewInit {
 
 	}
 
-	@ViewChild('searchRef', {read: ElementRef}) searchRef: ElementRef;
+	@ViewChild('searchRef', { read: ElementRef }) searchRef: ElementRef;
 
 	ngOnInit() {
 
@@ -49,7 +49,7 @@ export class BeersComponent implements AfterViewInit {
 	getBeers(query?: string) {
 		this.ngProgress.start();
 
-		this._beerService.getBeers(query).then((result) => {
+		this._beerService.getBeers(query).subscribe((result) => {
 
 			this.beerList = this.filteredBeerList = result;
 			if (this.query && this.query.length > 0) {
@@ -65,17 +65,14 @@ export class BeersComponent implements AfterViewInit {
 			this.ngProgress.done();
 			console.log(error)
 		}
-		).catch(error => {
-			this.ngProgress.done();
-			console.log(error)
-		});
+		);
 	}
 
 	getBeersByStyle(style: any) {
 
 		if (!this.query && this.query.length === 0) {
 			this.ngProgress.start();
-			this._beerService.getBeersByStyle(style.id).then(
+			this._beerService.getBeersByStyle(style.id).subscribe(
 				(data) => {
 					this.beerList = this.filteredBeerList = data;
 					this.ngProgress.done();
@@ -83,10 +80,7 @@ export class BeersComponent implements AfterViewInit {
 					this.ngProgress.done();
 					console.log(error)
 				}
-			).catch(error => {
-				this.ngProgress.done();
-				console.log(error)
-			});
+			);
 
 		} else {
 			if (style.id !== this.defaultBeerStyle.id)
@@ -101,7 +95,7 @@ export class BeersComponent implements AfterViewInit {
 	}
 
 	getBeerStyles() {
-		this._beerService.getBeerStyles().then((result) => {
+		this._beerService.getBeerStyles().subscribe((result) => {
 			this.beerStyles = result;
 
 			this.beerStyles.splice(0, 0, this.defaultBeerStyle);
@@ -111,7 +105,7 @@ export class BeersComponent implements AfterViewInit {
 		}, (error) => {
 			console.log(error)
 		}
-		).catch(error => console.log(error));
+		);
 	}
 }
 

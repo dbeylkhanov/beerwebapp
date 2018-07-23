@@ -28,7 +28,7 @@ export class BeerDetailsComponent {
 
 	getBeerDetails(beerId: string) {
 		this.ngProgress.start();
-		this._beerService.getBeerById(beerId).then(
+		this._beerService.getBeerById(beerId).subscribe(
 			data => {
 				this.beerDetail = data;
 				this.ngProgress.done();
