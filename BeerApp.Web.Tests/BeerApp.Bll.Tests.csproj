@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Beer.Bll\BeerApp.Bll.csproj" />
     <ProjectReference Include="..\Beer.Service\BeerApp.Service.csproj" />
-    <ProjectReference Include="..\BeerWebApp\BeerApp.Web.csproj" />
+    <ProjectReference Include="..\BeerApp.Web\BeerApp.Web.csproj" />
   </ItemGroup>
 
 </Project>
