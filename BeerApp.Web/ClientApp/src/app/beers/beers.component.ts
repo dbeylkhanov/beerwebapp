@@ -1,8 +1,10 @@
+
+import {fromEvent as observableFromEvent, Observable} from 'rxjs';
+
+import {distinctUntilChanged, debounceTime, map} from 'rxjs/operators';
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { BeerService } from '../services/beer.service'
-import {Observable}  from 'rxjs/Observable';
-import { BeerStyle } from "../shared/beer-style.model";
-import { Beer } from "../shared/beer.model";
+import { BeerService } from '../services/beer.service';
+import {Beer, BeerStyle} from "../shared/models/beer.model";
 import { NgProgress } from 'ngx-progressbar';
 
 @Component({
@@ -36,10 +38,10 @@ export class BeersComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		Observable.fromEvent((this.searchRef.nativeElement) as any, 'keyup')
-			.map((evt: any) => evt.target.value)
-			.debounceTime(1000)
-			.distinctUntilChanged()
+		observableFromEvent((this.searchRef.nativeElement) as any, 'keyup').pipe(
+			map((evt: any) => evt.target.value),
+			debounceTime(1000),
+			distinctUntilChanged(),)
 			.subscribe((text: string) => {
 				this.selectedStyle = this.beerStyles[0];
 				this.getBeers(text);
