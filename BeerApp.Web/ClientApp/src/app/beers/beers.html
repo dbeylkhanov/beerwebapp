@@ -1,4 +1,4 @@
-﻿<div class="container">
+<div class="container">
 	<ng-progress></ng-progress>
 	<div class="row">
 		<nav class="navbar">
@@ -28,7 +28,7 @@
 			<div class="thumbnail" *ngFor="let beer of (filteredBeerList | orderby:selectedSort:selectedSort=='abv' | paginate: { itemsPerPage: 10, currentPage: p })">
 				<div class="row">
 					<div class="col-sm-12">
-						<a [routerLink]="['/beers', beer.id]">
+						<a [routerLink]="['/beers', beer.id]" queryParamsHandling="preserve">
 							<h4>
 								{{beer.name}}
 							</h4>

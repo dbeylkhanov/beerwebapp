@@ -1,114 +1,120 @@
 
-import {fromEvent as observableFromEvent, Observable} from 'rxjs';
-
-import {distinctUntilChanged, debounceTime, map} from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { distinctUntilChanged, debounceTime, map } from 'rxjs/operators';
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { BeerService } from '../services/beer.service';
-import {Beer, BeerStyle} from "../shared/models/beer.model";
+import { Beer, BeerStyle } from "../shared/models/beer.model";
 import { NgProgress } from 'ngx-progressbar';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-	selector: 'beers',
-	templateUrl: './beers.html',
-	providers: [BeerService]
+  selector: 'beers',
+  templateUrl: './beers.html',
+  providers: [BeerService]
 })
 
 export class BeersComponent implements AfterViewInit {
-	selectedSort = 'abv';
-	query = '';
-	public selectedStyle: any;
-	public filteredBeerList: Beer[] = [];
-	public filteredBeerStylesList: BeerStyle[] = [];
-	//
-	private beerList: Beer[] = [];
-	private beerStyles: BeerStyle[] = [];
-	private defaultBeerStyle = <BeerStyle>{ id: 0, name: 'All' };
+  selectedSort = 'abv';
+  query = '';
+  public selectedStyle: any;
+  public filteredBeerList: Beer[] = [];
+  public filteredBeerStylesList: BeerStyle[] = [];
+  //
+  private beerList: Beer[] = [];
+  private beerStyles: BeerStyle[] = [];
+  private defaultBeerStyle = <BeerStyle>{ id: 0, name: 'All' };
 
-	constructor(private _beerService: BeerService, public ngProgress: NgProgress) {
+  constructor(private _beerService: BeerService, public ngProgress: NgProgress, private router: Router, private activeRoute: ActivatedRoute) {
 
-	}
+  }
 
-	@ViewChild('searchRef', { read: ElementRef }) searchRef: ElementRef | any;
+  @ViewChild('searchRef', { read: ElementRef }) searchRef: ElementRef | any;
 
-	ngOnInit() {
+  ngOnInit() {
+    const queryParams = this.activeRoute.snapshot.queryParams;
 
-		this.getBeers();
+    if (queryParams['q']) {
+      this.query = queryParams['q'];
+    }
 
-		this.getBeerStyles();
-	}
+    this.getBeers(queryParams.q);
+    this.getBeerStyles();
+  }
 
-	ngAfterViewInit() {
-		observableFromEvent((this.searchRef.nativeElement) as any, 'keyup').pipe(
-			map((evt: any) => evt.target.value),
-			debounceTime(1000),
-			distinctUntilChanged(),)
-			.subscribe((text: string) => {
-				this.selectedStyle = this.beerStyles[0];
-				this.getBeers(text);
-			});
-	}
+  ngAfterViewInit() {
+    fromEvent((this.searchRef.nativeElement) as any, 'keyup').pipe(
+      map((evt: any) => evt.target.value),
+      debounceTime(1000),
+      distinctUntilChanged(), )
+      .subscribe((text: string) => {
+        this.selectedStyle = this.beerStyles[0];
+        this.getBeers(text);
+      });
+  }
 
-	getBeers(query?: string) {
-		this.ngProgress.start();
+  getBeers(query?: string) {
+    this.ngProgress.start();
 
-		this._beerService.getBeers(query).subscribe((result) => {
+    this._beerService.getBeers(query).subscribe((result) => {
 
-			this.beerList = this.filteredBeerList = result;
-			if (this.query && this.query.length > 0) {
-				this.filteredBeerStylesList = this.beerStyles.filter(o1 => o1.id === 0 || this.beerList.some(o2 => o2.style != null && o1.id === o2.style.id));
-				this.selectedStyle = this.filteredBeerStylesList[0];
-			} else {
-				this.filteredBeerStylesList = this.beerStyles;
-				this.selectedStyle = this.filteredBeerStylesList[0];
-			}
-			this.ngProgress.done();
-		}, (error) => {
-			this.beerList.length = this.filteredBeerList.length = 0;
-			this.ngProgress.done();
-			console.log(error)
-		}
-		);
-	}
+      this.beerList = this.filteredBeerList = result;
+      if (this.query && this.query.length > 0) {
+        this.router.navigate(['/home'], { queryParams: { q: query } });
+        this.filteredBeerStylesList = this.beerStyles.filter(o1 => o1.id === 0 || this.beerList.some(o2 => o2.style != null && o1.id === o2.style.id));
+        this.selectedStyle = this.filteredBeerStylesList[0];
+      } else {
+        this.router.navigate(['/home']);
+        this.filteredBeerStylesList = this.beerStyles;
+        this.selectedStyle = this.filteredBeerStylesList[0];
+      }
+      this.ngProgress.done();
+    }, (error) => {
+      this.beerList.length = this.filteredBeerList.length = 0;
+      this.ngProgress.done();
+      console.log(error)
+    }
+    );
+  }
 
-	getBeersByStyle(style: any) {
+  getBeersByStyle(style: any) {
 
-		if (!this.query && this.query.length === 0) {
-			this.ngProgress.start();
-			this._beerService.getBeersByStyle(style.id).subscribe(
-				(data) => {
-					this.beerList = this.filteredBeerList = data;
-					this.ngProgress.done();
-				}, (error) => {
-					this.ngProgress.done();
-					console.log(error)
-				}
-			);
+    if (!this.query && this.query.length === 0) {
+      this.ngProgress.start();
+      this._beerService.getBeersByStyle(style.id).subscribe(
+        (data) => {
+          this.beerList = this.filteredBeerList = data;
+          this.ngProgress.done();
+        }, (error) => {
+          this.ngProgress.done();
+          console.log(error)
+        }
+      );
 
-		} else {
-			if (style.id !== this.defaultBeerStyle.id)
-				this.filteredBeerList = this.beerList.filter(x => x.style.id === style.id);
-			else
-				this.filteredBeerList = this.beerList;
-		}
-	}
+    } else {
+      if (style.id !== this.defaultBeerStyle.id)
+        this.filteredBeerList = this.beerList.filter(x => x.style.id === style.id);
+      else
+        this.filteredBeerList = this.beerList;
+    }
+  }
 
-	get noResults(): boolean {
-		return this.filteredBeerList.length === 0;
-	}
+  get noResults(): boolean {
+    return this.filteredBeerList.length === 0;
+  }
 
-	getBeerStyles() {
-		this._beerService.getBeerStyles().subscribe((result) => {
-			this.beerStyles = result;
+  getBeerStyles() {
+    this._beerService.getBeerStyles().subscribe((result) => {
+      this.beerStyles = result;
 
-			this.beerStyles.splice(0, 0, this.defaultBeerStyle);
+      this.beerStyles.splice(0, 0, this.defaultBeerStyle);
 
-			this.filteredBeerStylesList = this.beerStyles;
-			this.selectedStyle = this.filteredBeerStylesList[0];
-		}, (error) => {
-			console.log(error)
-		}
-		);
-	}
+      this.filteredBeerStylesList = this.beerStyles;
+      this.selectedStyle = this.filteredBeerStylesList[0];
+    }, (error) => {
+      console.log(error)
+    }
+    );
+  }
 }
 
 

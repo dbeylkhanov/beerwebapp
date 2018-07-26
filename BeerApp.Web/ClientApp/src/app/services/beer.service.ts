@@ -1,9 +1,9 @@
 import { Observable, throwError } from "rxjs";
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError} from 'rxjs/operators';
 import { Injectable, Inject } from '@angular/core';
 import { Response } from '@angular/http';
 import { Beer, BeerStyle } from '../shared/models/beer.model';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 
 @Injectable()
 export class BeerService {
@@ -14,7 +14,13 @@ export class BeerService {
   }
 
   getBeers(query?: any): Observable<Beer[]> {
-    return this.http.get<Beer[]>(this.myAppUrl + 'api/Beers/' + (query != undefined ? '?query=' + query : ''))
+    let params = {};
+    if (query) {
+      params = new HttpParams({
+        fromString: `query=${query}`
+      });
+    }
+    return this.http.get<Beer[]>(this.myAppUrl + 'api/Beers/', { params: params })
       .pipe(catchError(this.errorHandler));
 
   }
