@@ -1,12 +1,11 @@
 
 import { fromEvent } from 'rxjs';
-import { distinctUntilChanged, debounceTime, map } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, map, filter } from 'rxjs/operators';
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { BeerService } from '../services/beer.service';
 import { Beer, BeerStyle } from "../shared/models/beer.model";
 import { NgProgress } from 'ngx-progressbar';
 import { Router, ActivatedRoute } from '@angular/router';
-import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'beers',
@@ -24,7 +23,6 @@ export class BeersComponent implements AfterViewInit {
   private beerList: Beer[] = [];
   private beerStyles: BeerStyle[] = [];
   private defaultBeerStyle = <BeerStyle>{ id: 0, name: 'All' };
-
   constructor(private _beerService: BeerService, public ngProgress: NgProgress, private router: Router, private activeRoute: ActivatedRoute) {
 
   }
@@ -32,31 +30,20 @@ export class BeersComponent implements AfterViewInit {
   @ViewChild('searchRef', { read: ElementRef }) searchRef: ElementRef | any;
 
   ngOnInit() {
-    //const queryParams = this.activeRoute.snapshot.queryParams;
-    this.activeRoute.queryParams
-      //.filter(params => params.q)
-      .subscribe(params => {
-        console.log(params); // {order: "popular"}
-        if (params['q']) {
-          this.query = params['q'];
-        } else {
-          this.query = '';
-          this.getBeers(this.query);
-        }
-      });
-    
+    const queryParams = this.activeRoute.snapshot.queryParams;
 
+    if (queryParams['q']) {
+      this.query = queryParams['q'];
+    }
     this.getBeers(this.query);
     this.getBeerStyles();
   }
 
   ngAfterViewInit() {
-    fromEvent((this.searchRef.nativeElement) as any, 'keyup').pipe(
+    fromEvent((this.searchRef.nativeElement) as any, 'input').pipe(
       map((evt: any) => evt.target.value),
-      debounceTime(1000),
-      distinctUntilChanged(), )
-      .subscribe((text: string) => {
-        this.selectedStyle = this.beerStyles[0];
+      debounceTime(1100), distinctUntilChanged())
+      .subscribe((text: any) => {
         this.getBeers(text);
       });
   }
