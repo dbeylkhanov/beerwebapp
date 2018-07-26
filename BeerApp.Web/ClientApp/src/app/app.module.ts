@@ -5,9 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 
 import { BeersComponent } from './beers/beers.component';
 
@@ -23,9 +20,6 @@ import { BeerService } from './services/beer.service';
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     OrderByPipe,
     BeersComponent,
     BeerDetailsComponent
@@ -36,7 +30,7 @@ import { BeerService } from './services/beer.service';
     FormsModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: HomeComponent },
+      { path: 'home', component: BeersComponent, runGuardsAndResolvers: 'paramsOrQueryParamsChange' },
       { path: 'beers/:id', component: BeerDetailsComponent },
       { path: '**', redirectTo: 'home' }
     ]),

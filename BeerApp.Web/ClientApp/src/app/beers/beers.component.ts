@@ -6,6 +6,7 @@ import { BeerService } from '../services/beer.service';
 import { Beer, BeerStyle } from "../shared/models/beer.model";
 import { NgProgress } from 'ngx-progressbar';
 import { Router, ActivatedRoute } from '@angular/router';
+import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'beers',
@@ -31,13 +32,21 @@ export class BeersComponent implements AfterViewInit {
   @ViewChild('searchRef', { read: ElementRef }) searchRef: ElementRef | any;
 
   ngOnInit() {
-    const queryParams = this.activeRoute.snapshot.queryParams;
+    //const queryParams = this.activeRoute.snapshot.queryParams;
+    this.activeRoute.queryParams
+      //.filter(params => params.q)
+      .subscribe(params => {
+        console.log(params); // {order: "popular"}
+        if (params['q']) {
+          this.query = params['q'];
+        } else {
+          this.query = '';
+          this.getBeers(this.query);
+        }
+      });
+    
 
-    if (queryParams['q']) {
-      this.query = queryParams['q'];
-    }
-
-    this.getBeers(queryParams.q);
+    this.getBeers(this.query);
     this.getBeerStyles();
   }
 
@@ -57,13 +66,13 @@ export class BeersComponent implements AfterViewInit {
 
     this._beerService.getBeers(query).subscribe((result) => {
 
-      this.beerList = this.filteredBeerList = result;
+      this.beerList = this.filteredBeerList = result || [];
       if (this.query && this.query.length > 0) {
-        this.router.navigate(['/home'], { queryParams: { q: query } });
+        this.router.navigate(['/'], { queryParams: { q: query } });
         this.filteredBeerStylesList = this.beerStyles.filter(o1 => o1.id === 0 || this.beerList.some(o2 => o2.style != null && o1.id === o2.style.id));
         this.selectedStyle = this.filteredBeerStylesList[0];
       } else {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
         this.filteredBeerStylesList = this.beerStyles;
         this.selectedStyle = this.filteredBeerStylesList[0];
       }

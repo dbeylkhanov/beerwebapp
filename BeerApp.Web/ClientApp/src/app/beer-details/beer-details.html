@@ -31,7 +31,7 @@
 		<li *ngIf="beerDetail.style" class="list-group-item"><dl><dt>Style</dt><dd>{{beerDetail.style.description}}</dd></dl></li>
 		<li *ngIf="beerDetail.statusDisplay" class="list-group-item"><dl><dt>Status</dt><dd><h4><span class="label label-success">{{beerDetail.statusDisplay}}</span></h4></dd></dl></li>
 	</ul>
-	<a [routerLink]="['/home']"  queryParamsHandling="preserve" class="btn btn-primary pull-right" *ngIf="!ngProgress.isStarted()">
+	<a [routerLink]="['/']"  queryParamsHandling="preserve" class="btn btn-primary pull-right" *ngIf="!ngProgress.isStarted()">
 		<h5>
 			Go Back
 		</h5>
