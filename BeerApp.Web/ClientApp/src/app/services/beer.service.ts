@@ -5,7 +5,9 @@ import { Response } from '@angular/http';
 import { Beer, BeerStyle } from '../shared/models/beer.model';
 import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class BeerService {
   myAppUrl: string = "";
 
@@ -13,7 +15,8 @@ export class BeerService {
     this.myAppUrl = baseUrl;
   }
 
-  getBeers(query?: any): Observable<Beer[]> {
+
+  getBeers(query?: any) {
     let params = {};
     if (query) {
       params = new HttpParams({
@@ -25,17 +28,17 @@ export class BeerService {
 
   }
 
-  getBeersByStyle(styleId: any): Observable<Beer[]> {
+  getBeersByStyle(styleId: any) {
     return this.http.get<Beer[]>(this.myAppUrl + 'api/Beers/?styleId=' + styleId)
       .pipe(catchError(this.errorHandler));
   }
 
-  getBeerStyles(): Observable<BeerStyle[]> {
+  getBeerStyles() {
     return this.http.get<BeerStyle[]>(this.myAppUrl + "api/BeerStyles/")
       .pipe(catchError(this.errorHandler));
   }
 
-  getBeerById(id: string): Observable<Beer> {
+  getBeerById(id: string) {
     return this.http.get<Beer>(this.myAppUrl + "api/Beer/" + id)
       .pipe(catchError(this.errorHandler));
   }

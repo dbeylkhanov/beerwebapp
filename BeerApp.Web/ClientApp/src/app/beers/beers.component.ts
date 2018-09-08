@@ -10,7 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'beers',
   templateUrl: './beers.html',
-  providers: [BeerService]
+  providers: [], // No need to add service here.
 })
 
 export class BeersComponent implements AfterViewInit {
