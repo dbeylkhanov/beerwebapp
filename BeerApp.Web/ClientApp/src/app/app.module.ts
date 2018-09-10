@@ -12,9 +12,7 @@ import { BeerDetailsComponent } from './beer-details/beer-details.component';
 
 import { OrderByPipe } from './shared/pipes/orderby-pipe';
 
-import { NgProgressModule } from 'ngx-progressbar';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { BeerService } from './services/beer.service';
 
 @NgModule({
   declarations: [
@@ -34,10 +32,9 @@ import { BeerService } from './services/beer.service';
       { path: 'beers/:id', component: BeerDetailsComponent },
       { path: '**', redirectTo: 'home' }
     ]),
-    NgProgressModule,
     NgxPaginationModule
   ],
-  providers: [BeerService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

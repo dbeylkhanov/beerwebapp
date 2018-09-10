@@ -1,20 +1,16 @@
-import { Observable, throwError } from "rxjs";
-import { catchError} from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Injectable, Inject } from '@angular/core';
-import { Response } from '@angular/http';
 import { Beer, BeerStyle } from '../shared/models/beer.model';
-import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { throwError } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class BeerService {
-  myAppUrl: string = "";
+  private myAppUrl: string;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.myAppUrl = baseUrl;
   }
-
 
   getBeers(query?: any) {
     let params = {};
@@ -34,37 +30,23 @@ export class BeerService {
   }
 
   getBeerStyles() {
-    return this.http.get<BeerStyle[]>(this.myAppUrl + "api/BeerStyles/")
+    return this.http.get<BeerStyle[]>(this.myAppUrl + 'api/BeerStyles/')
       .pipe(catchError(this.errorHandler));
   }
 
   getBeerById(id: string) {
-    return this.http.get<Beer>(this.myAppUrl + "api/Beer/" + id)
+    return this.http.get<Beer>(this.myAppUrl + 'api/Beer/' + id)
       .pipe(catchError(this.errorHandler));
   }
 
-  private extractData(res: Response) {
-    if (res.status === 200) {
-      let body = res.json();
-      return body || [];
-    }
-    console.log(res.status);
-    return throwError(res);
-  }
-
-  private errorHandler(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
+  private errorHandler(err: HttpErrorResponse) {
+    let errorMessage;
+    if (err.error instanceof ErrorEvent) {
+      errorMessage = `An error occurred: ${err.error.message}`;
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
+      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
     }
-    // return an observable with a user-facing error message
-    return throwError(
-      'Something bad happened; please try again later.');
-  };
+    console.error(errorMessage);
+    return throwError(errorMessage);
+  }
 }

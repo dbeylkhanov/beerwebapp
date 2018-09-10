@@ -1,11 +1,11 @@
 
-import { fromEvent } from 'rxjs';
+
 import { distinctUntilChanged, debounceTime, map, filter } from 'rxjs/operators';
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { BeerService } from '../services/beer.service';
-import { Beer, BeerStyle } from "../shared/models/beer.model";
-import { NgProgress } from 'ngx-progressbar';
+import { Beer, BeerStyle } from '../shared/models/beer.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import { fromEvent, Observable } from 'rxjs';
 
 @Component({
   selector: 'beers',
@@ -23,8 +23,10 @@ export class BeersComponent implements AfterViewInit {
   private beerList: Beer[] = [];
   private beerStyles: BeerStyle[] = [];
   private defaultBeerStyle = <BeerStyle>{ id: 0, name: 'All' };
-  constructor(private _beerService: BeerService, public ngProgress: NgProgress, private router: Router, private activeRoute: ActivatedRoute) {
+  private noResults: boolean = false;
+  private loading: boolean = false;
 
+  constructor(private _beerService: BeerService, private router: Router, private activeRoute: ActivatedRoute) {
   }
 
   @ViewChild('searchRef', { read: ElementRef }) searchRef: ElementRef | any;
@@ -49,9 +51,9 @@ export class BeersComponent implements AfterViewInit {
   }
 
   getBeers(query?: string) {
-    this.ngProgress.start();
+    this.loading = true;
 
-    this._beerService.getBeers(query).subscribe((result) => {
+    this._beerService.getBeers(query).subscribe((result: Beer[]) => {
 
       this.beerList = this.filteredBeerList = result || [];
       if (this.query && this.query.length > 0) {
@@ -63,43 +65,46 @@ export class BeersComponent implements AfterViewInit {
         this.filteredBeerStylesList = this.beerStyles;
         this.selectedStyle = this.filteredBeerStylesList[0];
       }
-      this.ngProgress.done();
     }, (error) => {
       this.beerList.length = this.filteredBeerList.length = 0;
-      this.ngProgress.done();
-      console.log(error)
+      console.log(error);
+    }, () => {
+      this.loading = false;
+      this.setNoResultsFlag();
     }
     );
+  }
+
+  setNoResultsFlag() {
+    this.noResults = this.filteredBeerList.length === 0;
   }
 
   getBeersByStyle(style: any) {
 
     if (!this.query && this.query.length === 0) {
-      this.ngProgress.start();
+      this.loading = true;
       this._beerService.getBeersByStyle(style.id).subscribe(
-        (data) => {
+        (data: Beer[]) => {
           this.beerList = this.filteredBeerList = data;
-          this.ngProgress.done();
         }, (error) => {
-          this.ngProgress.done();
-          console.log(error)
+          console.log(error);
+        }, () => {
+          this.loading = false;
+          this.setNoResultsFlag();
         }
       );
 
     } else {
-      if (style.id !== this.defaultBeerStyle.id)
+      if (style.id !== this.defaultBeerStyle.id) {
         this.filteredBeerList = this.beerList.filter(x => x.style.id === style.id);
-      else
+      } else {
         this.filteredBeerList = this.beerList;
+      }
     }
   }
 
-  get noResults(): boolean {
-    return this.filteredBeerList.length === 0;
-  }
-
   getBeerStyles() {
-    this._beerService.getBeerStyles().subscribe((result) => {
+    this._beerService.getBeerStyles().subscribe((result: BeerStyle[]) => {
       this.beerStyles = result;
 
       this.beerStyles.splice(0, 0, this.defaultBeerStyle);
@@ -107,7 +112,7 @@ export class BeersComponent implements AfterViewInit {
       this.filteredBeerStylesList = this.beerStyles;
       this.selectedStyle = this.filteredBeerStylesList[0];
     }, (error) => {
-      console.log(error)
+      console.log(error);
     }
     );
   }

@@ -1,8 +1,8 @@
+
+import {filter} from 'rxjs/operators';
 import { Component } from '@angular/core';
 import { BeerService } from '../services/beer.service';
-import 'rxjs/Rx';
 import { ActivatedRoute } from '@angular/router';
-import { NgProgress } from 'ngx-progressbar';
 
 @Component({
   selector: 'beer-details',
@@ -11,13 +11,15 @@ import { NgProgress } from 'ngx-progressbar';
 export class BeerDetailsComponent {
   public selectedStyle: any;
   public beerDetail: any = {};
-  constructor(private _beerService: BeerService, private route: ActivatedRoute, public ngProgress: NgProgress) {
+  private loading: boolean = false;
+
+  constructor(private _beerService: BeerService, private route: ActivatedRoute) {
 
   }
 
   ngOnInit() {
-    this.route.params
-      .filter(params => params.id)
+    this.route.params.pipe(
+      filter(params => params.id))
       .subscribe(params => {
       this.getBeerDetails(params.id);
     });
@@ -25,11 +27,14 @@ export class BeerDetailsComponent {
   }
 
   getBeerDetails(beerId: string) {
-    this.ngProgress.start();
+    this.loading = true;
     this._beerService.getBeerById(beerId).subscribe(
       data => {
         this.beerDetail = data;
-        this.ngProgress.done();
+      }, error => {
+        console.log(error);
+      }, () => {
+        this.loading = false;
       }
     );
   }

@@ -1,51 +1,52 @@
 <div class="container">
-	<ng-progress></ng-progress>
-	<div class="row">
-		<nav class="navbar">
-			<div class="col-md-6">
-				<label for="search">Search :</label>
-				<input [(ngModel)]="query" type="text" class="form-control" id="search" #searchRef>
-			</div>
-			<div class="col-md-3">
-				<label for="beerStyle">Style :</label>
-				<select id="beerStyle" class="form-control" [(ngModel)]="selectedStyle" (change)="getBeersByStyle(selectedStyle)">
-					<option *ngFor="let beerStyle of filteredBeerStylesList" [ngValue]="beerStyle">
-						{{beerStyle.name}}
-					</option>
-				</select>
-			</div>
-			<div class="col-md-3">
-				<label for="sort">Sort by :</label>
-				<select [(ngModel)]="selectedSort" class="form-control" id="sort">
-					<option value="name">Alphabetical</option>
-					<option value="abv">Alcohol content</option>
-				</select>
-			</div>
-		</nav>
-	</div>
-	<div class="row" *ngIf="!ngProgress.isStarted() && !noResults">
-		<div class="col-md-12">
-			<div class="thumbnail" *ngFor="let beer of (filteredBeerList | orderby:selectedSort:selectedSort=='abv' | paginate: { itemsPerPage: 10, currentPage: p })">
-				<div class="row">
-					<div class="col-sm-12">
-						<a [routerLink]="['/beers', beer.id]" queryParamsHandling="preserve">
-							<h4>
-								{{beer.name}}
-							</h4>
-						</a>
-						<h4><span *ngIf="beer.abv" class="label label-warning">{{beer.abv}}°</span></h4>
-						<h4><span *ngIf="beer.style" class="label label-danger">{{beer.style.name}}</span></h4>
-						<div class="caption">
-							<p class="text-justify">{{beer.description || 'No description'}}</p>
-						</div>
+  <div class="row">
+    <nav class="navbar">
+      <div class="col-md-6">
+        <label for="search">Search :</label>
+        <input [(ngModel)]="query" type="text" class="form-control" id="search" #searchRef>
+      </div>
+      <div class="col-md-3">
+        <label for="beerStyle">Style :</label>
+        <select id="beerStyle" class="form-control" [(ngModel)]="selectedStyle" (change)="getBeersByStyle(selectedStyle)">
+          <option *ngFor="let beerStyle of filteredBeerStylesList" [ngValue]="beerStyle">
+            {{beerStyle.name}}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="sort">Sort by :</label>
+        <select [(ngModel)]="selectedSort" class="form-control" id="sort">
+          <option value="name">Alphabetical</option>
+          <option value="abv">Alcohol content</option>
+        </select>
+      </div>
+    </nav>
+  </div>
 
-					</div>
-				</div>
-			</div>
-			<pagination-controls class="text-center" (pageChange)="p = $event"></pagination-controls>
-		</div>
-	</div>
-	<div class="row" *ngIf="noResults && !ngProgress.isStarted()">
-		<h3 class="text-center"><span class="label label-default">No results found</span></h3>
-	</div>
+  <div class="row">
+    <p style="font-size: 20px;text-align: center" *ngIf="loading">Loading...</p>
+    <div class="col-md-12" [hidden]="noResults">
+      <div class="thumbnail" *ngFor="let beer of (filteredBeerList | orderby:selectedSort:selectedSort=='abv' | paginate: { itemsPerPage: 5, currentPage: p })">
+        <div class="row">
+          <div class="col-sm-12">
+            <a [routerLink]="['/beers', beer.id]" queryParamsHandling="preserve">
+              <h4>
+                {{beer.name}}
+              </h4>
+            </a>
+            <h4><span *ngIf="beer.abv" class="label label-warning">{{beer.abv}}°</span></h4>
+            <h4><span *ngIf="beer.style" class="label label-danger">{{beer.style.name}}</span></h4>
+            <div class="caption">
+              <p class="text-justify">{{beer.description || 'No description'}}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <pagination-controls class="text-center" (pageChange)="p = $event" [hidden]="loading"></pagination-controls>
+    </div>
+  </div>
+  <div class="row" *ngIf="noResults">
+    <h3 class="text-center"><span class="label label-default">No results found</span></h3>
+  </div>
 </div>
