@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 export class BeerDetailsComponent {
   public selectedStyle: any;
   public beerDetail: any = {};
-  private loading: boolean = false;
+  public loading: boolean = false;
 
   constructor(private _beerService: BeerService, private route: ActivatedRoute) {
 

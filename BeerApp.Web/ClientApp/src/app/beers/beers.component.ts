@@ -20,11 +20,12 @@ export class BeersComponent implements AfterViewInit {
   public filteredBeerList: Beer[] = [];
   public filteredBeerStylesList: BeerStyle[] = [];
   //
-  private beerList: Beer[] = [];
-  private beerStyles: BeerStyle[] = [];
-  private defaultBeerStyle = <BeerStyle>{ id: 0, name: 'All' };
-  private noResults: boolean = false;
-  private loading: boolean = false;
+  public beerList: Beer[] = [];
+  public beerStyles: BeerStyle[] = [];
+  public defaultBeerStyle = <BeerStyle>{ id: 0, name: 'All' };
+  public noResults: boolean = false;
+  public loading: boolean = false;
+  public currentPage:any;
 
   constructor(private _beerService: BeerService, private router: Router, private activeRoute: ActivatedRoute) {
   }
@@ -115,6 +116,10 @@ export class BeersComponent implements AfterViewInit {
       console.log(error);
     }
     );
+  }
+
+  pageChanged(pageNum) {
+    this.currentPage = pageNum;
   }
 }
 

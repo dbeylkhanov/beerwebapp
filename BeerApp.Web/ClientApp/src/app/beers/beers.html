@@ -26,7 +26,7 @@
   <div class="row">
     <p style="font-size: 20px;text-align: center" *ngIf="loading">Loading...</p>
     <div class="col-md-12" [hidden]="noResults">
-      <div class="thumbnail" *ngFor="let beer of (filteredBeerList | orderby:selectedSort:selectedSort=='abv' | paginate: { itemsPerPage: 5, currentPage: p })">
+      <div class="thumbnail" *ngFor="let beer of (filteredBeerList | orderby:selectedSort:selectedSort=='abv' | paginate: { itemsPerPage: 5, currentPage: currentPage })">
         <div class="row">
           <div class="col-sm-12">
             <a [routerLink]="['/beers', beer.id]" queryParamsHandling="preserve">
@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-      <pagination-controls class="text-center" (pageChange)="p = $event" [hidden]="loading"></pagination-controls>
+      <pagination-controls class="text-center" (pageChange)="pageChanged($event)" [hidden]="loading"></pagination-controls>
     </div>
   </div>
   <div class="row" *ngIf="noResults">
