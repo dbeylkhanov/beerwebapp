@@ -46,7 +46,7 @@
       <pagination-controls class="text-center" (pageChange)="pageChanged($event)" [hidden]="loading"></pagination-controls>
     </div>
   </div>
-  <div class="row" *ngIf="noResults">
+  <div class="row" *ngIf="noResults && !loading">
     <h3 class="text-center"><span class="label label-default">No results found</span></h3>
   </div>
 </div>
