@@ -2,6 +2,7 @@ using System;
 using BeerApp.Bll.Beers;
 using BeerApp.Entities;
 using BeerApp.Service;
+using BeerApp.Service.Common;
 using BeerApp.Service.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +28,8 @@ namespace BeerApp.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+	       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 	        services.Configure<CookiePolicyOptions>(options =>
 	        {
 		        options.CheckConsentNeeded = context => true;
@@ -50,11 +52,18 @@ namespace BeerApp.Web
 		        options.SuppressModelStateInvalidFilter = true;
 	        });
 	        // init API connection settings
-	        services.Configure<BreweryDBSettings>(Configuration.GetSection(nameof(BreweryDBSettings)));
+	        var apiSection = Configuration.GetSection(nameof(BreweryDBSettings));
+	        services.Configure<BreweryDBSettings>(apiSection);
 	        services.AddScoped(sp => sp.GetService<IOptionsSnapshot<BreweryDBSettings>>().Value);
 	        services.AddOptions();
 
-	        services.AddCors(opts =>
+	        services.AddHttpClient<BreweryDBClient>(httpClient =>
+	        {
+		        httpClient.BaseAddress = new Uri(apiSection.Get<BreweryDBSettings>().ApiUrl);
+		        httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+	        });
+
+			 services.AddCors(opts =>
 	        {
 		        opts.AddPolicy("CorsPolicy",
 			        builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

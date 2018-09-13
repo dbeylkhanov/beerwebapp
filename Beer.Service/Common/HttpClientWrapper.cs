@@ -4,6 +4,7 @@ using System.Net.Http;
 
 namespace BeerApp.Service.Common
 {
+	// Use for unit tests
 	public sealed class HttpClientWrapper
 	{
 		private static HttpClient _client;

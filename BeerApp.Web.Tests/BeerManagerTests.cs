@@ -3,6 +3,7 @@ using System.Linq;
 using BeerApp.Bll.Beers;
 using BeerApp.Entities;
 using BeerApp.Service;
+using BeerApp.Service.Common;
 using BeerApp.Service.Interfaces;
 using Xunit;
 
@@ -15,28 +16,31 @@ namespace BeerApp.Bll.Tests
 	{
 		private readonly IBeerManager _beerManager;
 
-		public BeerManagerTests()
-		{
-			IBeerService beerService = new BeerService(new BreweryDBSettings()
+		private BreweryDBSettings _apiSettings =>
+			new BreweryDBSettings()
 			{
 				ApiSecretKey = "YourSecretKey",
 				ApiUrl = "http://api.brewerydb.com/v2/"
-			});
+			};
 
-			_beerManager = new BeerManager(beerService);
+		private BreweryDBClient _http => new BreweryDBClient(HttpClientWrapper.GetInstance(_apiSettings.ApiUrl));
+
+		public BeerManagerTests()
+		{
+			_beerManager = new BeerManager(new BeerService(_apiSettings, _http));
 		}
 
 		[Fact]
 		public async void InvalidBreweryDbSettingsTest()
 		{
 			// act
-			var beerService = new BeerService(new BreweryDBSettings()
+			var fakeBeerService = new BeerService(new BreweryDBSettings()
 			{
-				ApiSecretKey = "YourSecretKey ",
+				ApiSecretKey = "FakeSecretKey",
 				ApiUrl = "http://api.brewerydb.com/v2/"
-			});
+			}, _http);
 
-			var beerManager = new BeerManager(beerService);
+			var beerManager = new BeerManager(fakeBeerService);
 
 			// act
 			var result = await beerManager.GetBeers();
